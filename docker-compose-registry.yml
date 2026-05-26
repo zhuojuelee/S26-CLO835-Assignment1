@@ -42,7 +42,7 @@ services:
     env_file: .env
     environment:
       - APP_COLOR=$PINK_COLOR
-    hostname: 'pink'
+    hostname: pink
     ports:
       - 8082:8080
     networks:
