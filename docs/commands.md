@@ -6,7 +6,24 @@ Series of command used throughout this assignment mainly for local setup (not pr
 
 ### Setting up env vars
 
-From root: `source scripts/export-env-vars.sh`
+Create a `.env` file using `.env.example`:
+
+```bash
+DBHOST=<GET_FROM_DOCKER_INSPECT> # do this after the container SQL container is built
+DBPORT=3306
+DBUSER=root
+DATABASE=employees
+DBPWD=<YOUR_DB_PASSWORD>
+APP_COLOR=lime
+MYSQL_ROOT_PASSWORD=<YOUR_DB_PASSWORD>
+
+# Docker Compose
+LIME_COLOR=lime
+BLUE_COLOR=blue
+PINK_COLOR=pink
+```
+
+Then from root: `source scripts/export-env-vars.sh`
 
 **Note:** Need to use `source` instead of `sh` here to actually set the environment in the terminal environment
 
@@ -95,4 +112,26 @@ docker push "zjlianlee/clo835-a1-sql:1.0.0" # use the correct tag version
 
 # Pulling the image (pull only)
 docker pull "zjlianlee/clo835-a1-sql:1.0.0" # make sure to use correct tag
+```
+
+## Docker Compose
+
+Set the following environment variables as:
+
+```bash
+DBHOST=<PICK_AN_ADDRESS_FROM_SUBNET_RANGE> # most likely only need to change this
+DBPWD=<YOUR_DB_PASSWORD>
+MYSQL_ROOT_PASSWORD=<YOUR_DB_PASSWORD>
+```
+
+Run the following to compose, this will build using the current `Dockerfile` setup:
+
+```bash
+docker compose up -d --build # --build optional if you want to rebuild the images
+```
+
+If you want to compose using the images on the DockerHub, run the following:
+
+```bash
+docker compose up -d -f docker-compose-registry.yml
 ```
