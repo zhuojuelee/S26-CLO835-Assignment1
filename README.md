@@ -1,3 +1,12 @@
+# Summer 2026 CLO835 (Portable Technologies in Cloud) Assignment 1
+
+Setup commands and all steps executed in the assignment can be found in [`docs/commands.md`](docs/commands.md).
+
+---
+
+> [!NOTE]
+> Below are instructions from forking the repo: https://github.com/sojoudian/CLO835_summer2026_assignment1
+
 # Install the required MySQL package
 
 sudo apt-get update -y
