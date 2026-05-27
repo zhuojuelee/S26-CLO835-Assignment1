@@ -1,22 +1,22 @@
 services:
   web-db:
-    image: TODO
+    image: zjlianlee/clo835-a1-sql:latest
     env_file: .env
     networks:
       bridge-network:
         ipv4_address: $DBHOST
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -u root -p$$MYSQL_ROOT_PASSWORD"]
+      test: ["CMD", "mysqladmin ping -u root -p$$MYSQL_ROOT_PASSWORD"]
       interval: 5s
       timeout: 3s
       retries: 3
       start_period: 10s
-  web-lime:
-    image: TODO
+  web-blue:
+    image: zjlianlee/clo835-a1-web-app:latest
     env_file: .env
     environment:
-      - APP_COLOR=$LIME_COLOR
-    hostname: lime
+      - APP_COLOR=$BLUE_COLOR
+    hostname: blue
     ports:
       - 8080:8080
     networks:
@@ -24,12 +24,12 @@ services:
     depends_on:
       web-db:
         condition: service_healthy
-  web-blue:
-    image: TODO
+  web-pink:
+    image: zjlianlee/clo835-a1-web-app:latest
     env_file: .env
     environment:
-      - APP_COLOR=$BLUE_COLOR
-    hostname: blue
+      - APP_COLOR=$PINK_COLOR
+    hostname: pink
     ports:
       - 8081:8080
     networks:
@@ -37,12 +37,12 @@ services:
     depends_on:
       web-db:
         condition: service_healthy
-  web-pink:
-    image: TODO
+  web-lime:
+    image: zjlianlee/clo835-a1-web-app:latest
     env_file: .env
     environment:
-      - APP_COLOR=$PINK_COLOR
-    hostname: pink
+      - APP_COLOR=$LIME_COLOR
+    hostname: lime
     ports:
       - 8082:8080
     networks:

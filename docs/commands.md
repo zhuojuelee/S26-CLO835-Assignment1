@@ -48,12 +48,12 @@ docker build -t clo835_a1_app -f Dockerfile .
 
 ```bash
 # We use 172.17.0.0/16 based on the README instructions
-docker network create --driver bridge --subnet 172.17.0.0/16" clo835-a1-net
+docker network create --driver bridge --subnet "172.50.0.0/16" clo835-a1-net
 ```
 
 ## Running the applications (on the Network Bridge)
 
-Ensure the SQL server is running first:
+### Ensure the SQL server is running first:
 
 ```bash
 docker run --name my_sql_db -d -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD --network clo835-a1-net  clo835_a1_db
@@ -62,19 +62,43 @@ docker run --name my_sql_db -d -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD --net
 Get the IP of the database and export it as `DBHOST` variable (may need to run the shell script again)
 
 ```bash
-docker inspect my_sql_db
+docker inspect my_sql_db | grep "IPAddress"
 ```
 
-Running the web app
+### Running the web app
 
 - Make sure the port mapping `<machine-port>:8080` and env var `APP_COLOR` is changed for each of the container instance
 
+App on port 8081 (Blue):
+
 ```bash
-docker run -p 8080:8080 -d \
-    --hostname $APP_COLOR \
-    --name my_web_app \
+docker run -p 8081:8080 -d \
+    --hostname $BLUE_COLOR \
+    --name my_web_app_blue \
     --network clo835-a1-net \
-    -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD -e APP_COLOR=$APP_COLOR \
+    -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD -e APP_COLOR=$BLUE_COLOR \
+    clo835_a1_app
+```
+
+App on port 8082 (Pink):
+
+```bash
+docker run -p 8082:8080 -d \
+    --hostname $PINK_COLOR \
+    --name my_web_app_pink \
+    --network clo835-a1-net \
+    -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD -e APP_COLOR=$PINK_COLOR \
+    clo835_a1_app
+```
+
+App on port 8083 (Lime):
+
+```bash
+docker run -p 8083:8080 -d \
+    --hostname $LIME_COLOR \
+    --name my_web_app_lime \
+    --network clo835-a1-net \
+    -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD -e APP_COLOR=$LIME_COLOR \
     clo835_a1_app
 ```
 
@@ -96,6 +120,28 @@ docker push "zjlianlee/clo835-a1-web-app:1.0.0" # use the correct tag version
 
 # Pulling the image (pull only)
 docker pull "zjlianlee/clo835-a1-web-app:1.0.0" # make sure to use correct tag
+
+# Running the app with the pulled image
+docker run -p 8081:8080 -d \
+    --hostname $BLUE_COLOR \
+    --name my_web_app_blue \
+    --network clo835-a1-net \
+    -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD -e APP_COLOR=$BLUE_COLOR \
+    zjlianlee/clo835-a1-web-app:1.0.0
+
+docker run -p 8082:8080 -d \
+    --hostname $PINK_COLOR \
+    --name my_web_app_pink \
+    --network clo835-a1-net \
+    -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD -e APP_COLOR=$PINK_COLOR \
+    zjlianlee/clo835-a1-web-app:1.0.0
+
+docker run -p 8083:8080 -d \
+    --hostname $LIME_COLOR \
+    --name my_web_app_lime \
+    --network clo835-a1-net \
+    -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD -e APP_COLOR=$LIME_COLOR \
+    zjlianlee/clo835-a1-web-app:1.0.0
 ```
 
 SQL Server
@@ -112,6 +158,9 @@ docker push "zjlianlee/clo835-a1-sql:1.0.0" # use the correct tag version
 
 # Pulling the image (pull only)
 docker pull "zjlianlee/clo835-a1-sql:1.0.0" # make sure to use correct tag
+
+# Running the database service with the image
+docker run --name my_sql_db -d -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD --network clo835-a1-net  zjlianlee/clo835-a1-sql:1.0.0
 ```
 
 ## Docker Compose
