@@ -117,7 +117,7 @@ if __name__ == '__main__':
     parser.add_argument('--color', required=False)
     args = parser.parse_args()
 
-    print("Hello CLO835 Summer 2026")
+    # print("Hello CLO835 Summer 2026")
 
     if args.color:
         print("Color from command line argument =" + args.color)
